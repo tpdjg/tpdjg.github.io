@@ -13,7 +13,8 @@
         
         #SC_F {
             width: 150px;
-            height: 30px;
+            height: 50px;
+            font-size: 30px;
             background-color: #222;
             cursor: pointer;
             position: relative;
@@ -28,12 +29,21 @@
             position: relative;
         }
         
-        #SC_S_S {
+        .SC1  {
+            font-size: 30px;
             position: relative;
             left: 30px;
             height: 50px;
             text-align: center;
             border: 1px solid #ffffff;
+            background-color: #234a53;
+            transition: scale 0.2s;
+            margin-top: 10px;
+
+        }   
+        .SC1:hover{
+            cursor: pointer;
+            background-color: #3f8a9b;
         }
         
         div {
@@ -51,6 +61,20 @@
             transform: rotate(90deg);
             transition: transform 0.2s;
         }
+        b{
+            transform: rotate(90deg);
+        }
+        #foot{
+            margin-top: 100px;
+            text-align: center;
+            color:grey;
+            margin-right: 100px;
+        }
+        .ft{    
+            margin-left: 100px;
+            color:gray; 
+            text-decoration:none;  
+        }
     </style>
 </head>
 
@@ -60,17 +84,20 @@
         <div id="SC_F" onclick="onTileClick()">查分<b id="SC2">></b></div>
         <div id="SC_S">
             <hr color="#444444" />
-            <div onclick="runwindow(0)" id="SC_S_S" class="SC1">总分(https://m13jwo3d.yichafen.com)
+            <div onclick="runwindow(0)" id="SC_S_S1" class="SC1">总分(https://m13jwo3d.yichafen.com)
             </div>
-            <div onclick="runwindow(1)" id="SC_S_S" class="SC1">语文(https://h4sxbuxd.yichafen.com)
+            <div onclick="runwindow(1)" id="SC_S_S2" class="SC1">语文(https://h4sxbuxd.yichafen.com)
             </div>
-            <div onclick="runwindow(2)" id="SC_S_S" class="SC1">英语(https://b2vfd1pd.yichafen.com)
+            <div onclick="runwindow(2)" id="SC_S_S3" class="SC1">英语(https://b2vfd1pd.yichafen.com)
             </div>
-            <div onclick="runwindow(3)" id="SC_S_S" class="SC1">历史(https://f3kl6w2d.yichafen.com)
+            <div onclick="runwindow(3)" id="SC_S_S4" class="SC1">历史(https://f3kl6w2d.yichafen.com)
             </div>
-            <div onclick="runwindow(4)" id="SC_S_S" class="SC1">物理(https://b3d628qd.yichafen.com)
+            <div onclick="runwindow(4)" id="SC_S_S5" class="SC1">物理(https://b3d628qd.yichafen.com)
             </div>
         </div>
+    </div>
+    <div id="foot">
+        <a class="ft" href="https://www.github.io/tpdjg/tpdjg.github.io">返回本站</a>
     </div>
     <script>
         var SC_S = document.getElementById("SC_S");
@@ -85,21 +112,32 @@
             "https://f3kl6w2d.yichafen.com",
             "https://b3d628qd.yichafen.com",
         ]
-        refresh();
+        refresh_width();
         window.addEventListener("resize", () => {
-            refresh();
+            refresh_width();
         })
         var runwindow = function(a) {
             window.open(Urls[a])
         }
 
-        function refresh() {
+        function refresh_width() {
             SC_S.style.width = String(document.body.offsetWidth - 100) + "px";
             SC_F.style.width = String(document.body.offsetWidth - 100) + "px";
             SC.style.width = String(document.body.offsetWidth - 100) + "px";
-            SC2.style.left = String(document.body.offsetWidth - 150) + "px";
+            SC2.style.left = String(document.body.offsetWidth - 200) + "px";
             for (var i = 0; i < 5; i++) {
                 SC1[i].style.width = String(document.body.offsetWidth - 160) + "px";
+
+            }
+
+        }
+        function refresh_height() {
+            SC_S.style.height = String(document.body.offsetWidth - 100) + "px";
+            SC_F.style.height = String(document.body.offsetWidth - 100) + "px";
+            SC.style.height = String(document.body.offsetWidth - 100) + "px";
+            SC2.style.height = String(document.body.offsetWidth - 200) + "px";
+            for (var i = 0; i < 5; i++) {
+                SC1[i].style.height = String(document.body.offsetWidth - 160) + "px";
 
             }
 
@@ -107,10 +145,8 @@
 
 
         function onTileClick() {
-            SC_S.style.height = SC_S.offsetHeight === 0 ? '280px' : '0';
-            SC2.style.transform = SC_S.offsetHeight === 0 ? 'rotate(90deg)' : "0";
+            SC_S.style.height = SC_S.offsetHeight === 0 ? '350px' : '0';
         }
     </script>
 </body>
-
 </html>
