@@ -1,56 +1,116 @@
 <!DOCTYPE html>
+<html style="background-color: #000;">
 
-<head style="background-color:#ffffff">
-    <title>14班查分综合</title>
-    <div style="position:absolute;left:50%;transform: translate(-50%, -10%);font-size:50px;background-color:cyan;">2023级
-        <span style="color:red">14</span> 班查分面板
-    </div>
+<head>
+    <title>TPDJG.IO</title>
     <style>
-        #sub1 {
-            font-size: 40px;
-            font-weight: 100;
-            border-style: solid;
-            border-width: 1px;
-            border-color: black;
-            background-color: rgba(255, 255, 255, 0.712);
-            max-width: fill-available;
-            position:absolute;
-            left:50%;
-            transform: translate(-50%, -10%)
+        #SC {
+            border: 2px solid rgb(67, 170, 170);
+            border-radius: 5px;
+            position: relative;
+            left: 50px;
         }
-        br {
-            line-height:100px;
+        
+        #SC_F {
+            width: 150px;
+            height: 30px;
+            background-color: #222;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        #SC_S {
+            width: 150px;
+            overflow: hidden;
+            height: 0;
+            background-color: #444;
+            transition: height 0.2s;
+            position: relative;
+        }
+        
+        #SC_S_S {
+            position: relative;
+            left: 30px;
+            height: 50px;
+            text-align: center;
+            border: 1px solid #ffffff;
+        }
+        
+        div {
+            color: #ffffff;
+        }
+        
+        a {
+            color: #00f;
+        }
+        
+        #SC2 {
+            position: relative;
+            left: 200px;
+            overflow: hidden;
+            transform: rotate(90deg);
+            transition: transform 0.2s;
         }
     </style>
-
 </head>
 
-<body style="background-color:#ffffff">
-    <br> </br>
-    <br>
-    <a id="sub1" calss="Cy" style="color:black" href="https://m13jwo3d.yichafen.com">  总分  </a>
-    <br> </br>
-    <br>
-    <a id="sub1" calss="Cy" style="color:rgb(236, 180, 106)" href="https://h4sxbuxd.yichafen.com">语文</a>
-    <br> </br>
-    <br>
-    <a id="sub1" calss="Cn" style="color:rgb(37, 205, 228)">数学</a>
-    <br> </br>
-    <br>
-    <a id="sub1" calss="Cy" style="color:rgb(216, 118, 255)" href="https://b2vfd1pd.yichafen.com">英语</a>
-    <br> </br>
-    <br>
-    <a id="sub1" calss="Cn" style="color:rgb(125, 255, 131)">生物</a>
-    <br> </br>
-    <br>
-    <a id="sub1" calss="Cn" style="color:rgb(139, 241, 255)">地理</a>
-    <br> </br>
-    <br>
-    <a id="sub1" calss="Cn" style="color:rgb(195, 46, 224)">道法</a>
-    <br> </br>
-    <br>
-    <a id="sub1" calss="Cn" style="color:rgb(124, 63, 28)" href="https://f3kl6w2d.yichafen.com/">历史</a>
-    <br> </br>
-    <br>
-    <a id="sub1" calss="Cy" style="color:rgb(44, 42, 165)" href="https://b3d628qd.yichafen.com">物理</a>
+<body>
+    <div style="font-size: 80px;text-align: center;">TPDJG的妙妙小网站</div>
+    <div id="SC">
+        <div id="SC_F" onclick="onTileClick()">查分<b id="SC2">></b></div>
+        <div id="SC_S">
+            <hr color="#444444" />
+            <div onclick="runwindow(0)" id="SC_S_S" class="SC1">总分(https://m13jwo3d.yichafen.com)
+            </div>
+            <div onclick="runwindow(1)" id="SC_S_S" class="SC1">语文(https://h4sxbuxd.yichafen.com)
+            </div>
+            <div onclick="runwindow(2)" id="SC_S_S" class="SC1">英语(https://b2vfd1pd.yichafen.com)
+            </div>
+            <div onclick="runwindow(3)" id="SC_S_S" class="SC1">历史(https://f3kl6w2d.yichafen.com)
+            </div>
+            <div onclick="runwindow(4)" id="SC_S_S" class="SC1">物理(https://b3d628qd.yichafen.com)
+            </div>
+        </div>
+    </div>
+    <script>
+        var SC_S = document.getElementById("SC_S");
+        var SC_F = document.getElementById("SC_F");
+        var SC = document.getElementById("SC");
+        var SC2 = document.getElementById("SC2");
+        var SC1 = document.getElementsByClassName("SC1");
+        var Urls = [
+            "https://m13jwo3d.yichafen.com",
+            "https://h4sxbuxd.yichafen.com",
+            "https://b2vfd1pd.yichafen.com",
+            "https://f3kl6w2d.yichafen.com",
+            "https://b3d628qd.yichafen.com",
+        ]
+        refresh();
+        window.addEventListener("resize", () => {
+            refresh();
+        })
+        var runwindow = function(a) {
+            window.open(Urls[a])
+        }
+
+        function refresh() {
+            SC_S.style.width = String(document.body.offsetWidth - 100) + "px";
+            SC_F.style.width = String(document.body.offsetWidth - 100) + "px";
+            SC.style.width = String(document.body.offsetWidth - 100) + "px";
+            SC2.style.left = String(document.body.offsetWidth - 150) + "px";
+            for (var i = 0; i < 5; i++) {
+                SC1[i].style.width = String(document.body.offsetWidth - 160) + "px";
+
+            }
+
+        }
+
+
+        function onTileClick() {
+            SC_S.style.height = SC_S.offsetHeight === 0 ? '280px' : '0';
+            SC2.style.transform = SC_S.offsetHeight === 0 ? 'rotate(90deg)' : "0";
+        }
+    </script>
 </body>
+
+</html>
