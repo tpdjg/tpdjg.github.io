@@ -86,18 +86,18 @@
             <hr color="#444444" />
             <div onclick="runwindow(0)" id="SC_S_S1" class="SC1">总分(https://m13jwo3d.yichafen.com)
             </div>
-            <div onclick="runwindow(1)" id="SC_S_S2" class="SC1">语文(https://h4sxbuxd.yichafen.com)
+            <div onclick="runwindow(1)" id="SC_S_S2" class="SC1">语文(https://h4sxbuxd.yichafen.com) 
             </div>
-            <div onclick="runwindow(2)" id="SC_S_S3" class="SC1">英语(https://b2vfd1pd.yichafen.com)
+            <div onclick="runwindow(2)" id="SC_S_S3" class="SC1">英语(https://b2vfd1pd.yichafen.com) 
             </div>
-            <div onclick="runwindow(3)" id="SC_S_S4" class="SC1">历史(https://f3kl6w2d.yichafen.com)
+            <div onclick="runwindow(3)" id="SC_S_S4" class="SC1">历史(https://f3kl6w2d.yichafen.com) 
             </div>
             <div onclick="runwindow(4)" id="SC_S_S5" class="SC1">物理(https://b3d628qd.yichafen.com)
             </div>
         </div>
     </div>
     <div id="foot">
-        <a class="ft" href="https://www.github.io/tpdjg/tpdjg.github.io">返回本站</a>
+        <a class="ft" href="https://github.com/tpdjg/tpdjg.github.io">返回本站</a>
     </div>
     <script>
         var SC_S = document.getElementById("SC_S");
@@ -105,6 +105,7 @@
         var SC = document.getElementById("SC");
         var SC2 = document.getElementById("SC2");
         var SC1 = document.getElementsByClassName("SC1");
+        var SC_S_HT = '350px';
         var Urls = [
             "https://m13jwo3d.yichafen.com",
             "https://h4sxbuxd.yichafen.com",
@@ -127,17 +128,15 @@
             SC2.style.left = String(document.body.offsetWidth - 200) + "px";
             for (var i = 0; i < 5; i++) {
                 SC1[i].style.width = String(document.body.offsetWidth - 160) + "px";
-
-            }
-
-        }
-        function refresh_height() {
-            SC_S.style.height = String(document.body.offsetWidth - 100) + "px";
-            SC_F.style.height = String(document.body.offsetWidth - 100) + "px";
-            SC.style.height = String(document.body.offsetWidth - 100) + "px";
-            SC2.style.height = String(document.body.offsetWidth - 200) + "px";
-            for (var i = 0; i < 5; i++) {
-                SC1[i].style.height = String(document.body.offsetWidth - 160) + "px";
+                if(document.body.offsetWidth<750){
+                    SC1[i].style.height = "100px"
+                    SC_S_HT = '700px';
+                    SC_S.style.height = SC_S.offsetHeight === 0 ? '0' : SC_S_HT;
+                }else{
+                    SC1[i].style.height = "50px"
+                    SC_S_HT = '350px';
+                    SC_S.style.height = SC_S.offsetHeight === 0 ? '0' : SC_S_HT;
+                }
 
             }
 
@@ -145,7 +144,7 @@
 
 
         function onTileClick() {
-            SC_S.style.height = SC_S.offsetHeight === 0 ? '350px' : '0';
+            SC_S.style.height = SC_S.offsetHeight === 0 ? SC_S_HT : '0';
         }
     </script>
 </body>
