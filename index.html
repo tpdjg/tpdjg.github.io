@@ -94,6 +94,10 @@
             </div>
             <div onclick="runwindow(4)" id="SC_S_S5" class="SC1">物理(https://b3d628qd.yichafen.com)
             </div>
+            <div onclick="runwindow(5)" id="SC_S_S6" class="SC1">数学(https://b65ol9ed.yichafen.com) 
+            </div>
+            <div onclick="runwindow(6)" id="SC_S_S7" class="SC1">道法(https://o0do7iqd.yichafen.com)
+            </div>
         </div>
     </div>
     <div id="foot">
@@ -112,6 +116,8 @@
             "https://b2vfd1pd.yichafen.com",
             "https://f3kl6w2d.yichafen.com",
             "https://b3d628qd.yichafen.com",
+            "https://b65ol9ed.yichafen.com",
+            "https://o0do7iqd.yichafen.com",
         ]
         refresh_width();
         window.addEventListener("resize", () => {
@@ -130,11 +136,11 @@
                 SC1[i].style.width = String(document.body.offsetWidth - 160) + "px";
                 if(document.body.offsetWidth<750){
                     SC1[i].style.height = "100px"
-                    SC_S_HT = '700px';
+                    SC_S_HT = '820px';
                     SC_S.style.height = SC_S.offsetHeight === 0 ? '0' : SC_S_HT;
                 }else{
                     SC1[i].style.height = "50px"
-                    SC_S_HT = '350px';
+                    SC_S_HT = '480px';
                     SC_S.style.height = SC_S.offsetHeight === 0 ? '0' : SC_S_HT;
                 }
 
