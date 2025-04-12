@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-CN" style="background-color: #000;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TPDJG.IO - 成绩查询系统</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            color: #fff;
+            background-color: #000;
+            min-height: 100vh;
+        }
+        
+        .header {
+            font-size: 2.5rem;
+            text-align: center;
+            margin: 20px 0 40px;
+            color: #43aaaa;
+            text-shadow: 0 0 10px rgba(67, 170, 170, 0.5);
+        }
+        
+        .score-container {
+            border: 2px solid #43aaaa;
+            border-radius: 5px;
+            width: calc(100% - 40px);
+            max-width: 800px;
+            margin: 0 auto;
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(67, 170, 170, 0.3);
+        }
+        
+        .score-header {
+            width: 100%;
+            height: 60px;
+            font-size: 1.5rem;
+            background-color: #222;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            box-sizing: border-box;
+        }
+        
+        .score-header:hover {
+            background-color: #2a2a2a;
+        }
+        
+        .score-content {
+            width: 100%;
+            background-color: #444;
+            transition: height 0.3s ease;
+            height: 0;
+            overflow: hidden;
+        }
+        
+        .score-item {
+            font-size: 1.2rem;
+            padding: 15px 30px;
+            text-align: center;
+            border: 1px solid #555;
+            background-color: #234a53;
+            transition: all 0.2s;
+            margin: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            box-sizing: border-box;
+        }
+        
+        .score-item:hover {
+            background-color: #3f8a9b;
+            transform: scale(1.02);
+        }
+        
+        .arrow {
+            transition: transform 0.3s ease;
+            font-size: 1.2rem;
+        }
+        
+        .footer {
+            margin-top: 60px;
+            text-align: center;
+            color: #666;
+        }
+        
+        .footer-link {
+            color: #43aaaa;
+            text-decoration: none;
+            margin: 0 15px;
+            transition: color 0.2s;
+        }
+        
+        .footer-link:hover {
+            color: #5fdada;
+            text-decoration: underline;
+        }
+        
+        hr.divider {
+            border: none;
+            height: 1px;
+            background-color: #555;
+            margin: 10px 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .header {
+                font-size: 1.8rem;
+                margin: 15px 0 30px;
+            }
+            
+            .score-item {
+                font-size: 1rem;
+                padding: 20px 15px;
+                margin: 8px 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">TPDJG's成绩查询系统</div>
+    
+    <div class="score-container">
+        <div class="score-header" onclick="toggleScoreMenu()">
+            <span>成绩查询</span>
+            <span class="arrow">›</span>
+        </div>
+        <div class="score-content" id="scoreContent">
+            <hr class="divider" />
+            <div onclick="openScoreWindow(0)" class="score-item">总分 (https://m13jwo3d.yichafen.com)</div>
+            <div onclick="openScoreWindow(1)" class="score-item">语文 (https://h4sxbuxd.yichafen.com)</div>
+            <div onclick="openScoreWindow(2)" class="score-item">英语 (https://b2vfd1pd.yichafen.com)</div>
+            <div onclick="openScoreWindow(3)" class="score-item">历史 (https://f3kl6w2d.yichafen.com)</div>
+            <div onclick="openScoreWindow(4)" class="score-item">物理 (https://b3d628qd.yichafen.com)</div>
+            <div onclick="openScoreWindow(5)" class="score-item">数学 (https://b65ol9ed.yichafen.com)</div>
+            <div onclick="openScoreWindow(6)" class="score-item">道法 (https://o0do7iqd.yichafen.com)</div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <a class="footer-link" href="https://github.com/tpdjg/tpdjg.github.io">返回首页</a>
+        <a class="footer-link" href="mailto:your-email@example.com">联系我们</a>
+    </div>
+
+    <script>
+        const scoreUrls = [
+            "https://m13jwo3d.yichafen.com",
+            "https://h4sxbuxd.yichafen.com",
+            "https://b2vfd1pd.yichafen.com",
+            "https://f3kl6w2d.yichafen.com",
+            "https://b3d628qd.yichafen.com",
+            "https://b65ol9ed.yichafen.com",
+            "https://o0do7iqd.yichafen.com"
+        ];
+        
+        const scoreContent = document.getElementById("scoreContent");
+        const arrow = document.querySelector(".arrow");
+        let isMenuOpen = false;
+        
+        // 初始化内容高度
+        function initContentHeight() {
+            if (window.innerWidth < 768) {
+                // 移动设备高度 - 7个项目 x 约85px每个
+                scoreContent.dataset.height = '600px';
+            } else {
+                // 桌面设备高度 - 7个项目 x 约65px每个
+                scoreContent.dataset.height = '500px';
+            }
+        }
+        
+        // 切换菜单状态
+        function toggleScoreMenu() {
+            if (!isMenuOpen) {
+                scoreContent.style.height = scoreContent.dataset.height;
+                arrow.style.transform = 'rotate(90deg)';
+            } else {
+                scoreContent.style.height = '0';
+                arrow.style.transform = 'rotate(0deg)';
+            }
+            isMenuOpen = !isMenuOpen;
+        }
+        
+        // 打开成绩窗口
+        function openScoreWindow(index) {
+            if (index >= 0 && index < scoreUrls.length) {
+                window.open(scoreUrls[index], '_blank');
+            }
+        }
+        
+        // 响应式调整
+        function handleResize() {
+            initContentHeight();
+            if (isMenuOpen) {
+                scoreContent.style.height = scoreContent.dataset.height;
+            }
+        }
+        
+        // 初始化
+        window.addEventListener('DOMContentLoaded', initContentHeight);
+        window.addEventListener('resize', handleResize);
+    </script>
+</body>
+</html>

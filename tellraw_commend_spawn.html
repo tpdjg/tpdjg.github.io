@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minecraft Tellraw 命令生成器</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #2c2c2c;
+            color: #333;
+        }
+        h1 {
+            color: #719bc5;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .container {
+            background-color: rgb(78, 78, 78);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            color:#2980b9;
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"], textarea, select {
+            background-color: #006992;
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #006992;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .checkbox-group {
+            margin: 10px 0;
+        }
+        .checkbox-group label {
+            display: inline-block;
+            margin-left: 5px;
+            font-weight: normal;
+        }
+        .color-picker {
+            display: flex;
+            align-items: center;
+        }
+        .color-picker input[type="color"] {
+            margin-left: 10px;
+            width: 50px;
+            height: 30px;
+            padding: 0;
+            border: none;
+            background: none;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .result-container {
+            margin-top: 20px;
+        }
+        .result {
+            padding: 15px;
+            background-color: #2e8849;
+            border-radius: 4px;
+            border-left: 4px solid #3498db;
+            word-wrap: break-word;
+            font-family: monospace;
+            white-space: pre-wrap;
+            margin-bottom: 10px;
+        }
+        .copy-btn {
+            background-color: #2ecc71;
+            margin-left: 0;
+        }
+        .copy-btn:hover {
+            background-color: #27ae60;
+        }
+        .section {
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .section-title {
+            font-size: 18px;
+            color: #8db2d6;
+            margin-bottom: 15px;
+        }
+        .buttons {
+            display: flex;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Minecraft Tellraw 命令生成器</h1>
+    <div class="container">
+        <div class="section">
+            <div class="section-title">基础设置:填入@a, @p, @s 等</div>
+            <div class="form-group">
+                <label for="target">接收消息的玩家:</label>
+                <input type="text" id="target" value="@a">
+            </div>
+            <div class="form-group">
+                <label for="selector">消息中的玩家名:</label>
+                <input type="text" id="selector" value="@s">
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">主文本内容</div>
+            <div class="form-group">
+                <label for="prefixText">前缀文本 (在玩家名前显示的文本):</label>
+                <input type="text" id="prefixText" value="">
+            </div>
+            <div class="form-group">
+                <label for="middleText">中间文本 (玩家名后显示的文本):</label>
+                <input type="text" id="middleText" value=" 正在听">
+            </div>
+            <div class="form-group">
+                <label for="mainText">主要显示文本:</label>
+                <input type="text" id="mainText" value="MartineGaming - Windows Longhorn Remix">
+            </div>
+            <div class="checkbox-group">
+                <input type="checkbox" id="underlined" checked>
+                <label for="underlined">下划线</label>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">点击事件设置</div>
+            <div class="form-group">
+                <label for="clickAction">点击动作:</label>
+                <select id="clickAction">
+                    <option value="open_url">打开URL</option>
+                    <option value="run_command">运行命令</option>
+                    <option value="suggest_command">建议命令</option>
+                    <option value="change_page">更改页面</option>
+                    <option value="copy_to_clipboard">复制到剪贴板</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="clickValue">点击值 (URL或命令):</label>
+                <input type="text" id="clickValue" value="<点击后进入的网址>">
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">悬停事件设置</div>
+            <div class="form-group">
+                <label for="hoverTextStart">悬停文本开头:</label>
+                <input type="text" id="hoverTextStart" value="<显示文本开头>">
+            </div>
+            <div class="form-group">
+                <label for="hoverTextMiddle">悬停文本中段:</label>
+                <input type="text" id="hoverTextMiddle" value="<显示文本中段>">
+            </div>
+            <div class="form-group">
+                <label for="hoverTextEnd">悬停文本末尾:</label>
+                <input type="text" id="hoverTextEnd" value="<显示文本末尾>">
+            </div>
+            <div class="form-group">
+                <label for="hoverColorStart">悬停文本开头颜色:</label>
+                <div class="color-picker">
+                    <input type="text" id="hoverColorStart" value="#808080">
+                    <input type="color" id="hoverColorStartPicker" value="#808080">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="hoverColorMiddle">悬停文本中段颜色:</label>
+                <div class="color-picker">
+                    <input type="text" id="hoverColorMiddle" value="#ffffff">
+                    <input type="color" id="hoverColorMiddlePicker" value="#ffffff">
+                </div>
+            </div>
+        </div>
+
+        <div class="buttons">
+            <button id="generateBtn">生成命令</button>
+        </div>
+
+        <div class="result-container">
+            <div class="result" id="result">
+                生成的命令将显示在这里...
+            </div>
+            <button id="copyBtn" class="copy-btn" disabled>复制到剪贴板</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 颜色选择器同步
+            document.getElementById('hoverColorStartPicker').addEventListener('input', function() {
+                document.getElementById('hoverColorStart').value = this.value;
+            });
+            
+            document.getElementById('hoverColorMiddlePicker').addEventListener('input', function() {
+                document.getElementById('hoverColorMiddle').value = this.value;
+            });
+            
+            document.getElementById('hoverColorStart').addEventListener('input', function() {
+                if (this.value.match(/^#[0-9a-f]{6}$/i)) {
+                    document.getElementById('hoverColorStartPicker').value = this.value;
+                }
+            });
+            
+            document.getElementById('hoverColorMiddle').addEventListener('input', function() {
+                if (this.value.match(/^#[0-9a-f]{6}$/i)) {
+                    document.getElementById('hoverColorMiddlePicker').value = this.value;
+                }
+            });
+
+            let currentCommand = '';
+            
+            // 生成命令
+            document.getElementById('generateBtn').addEventListener('click', function() {
+                const target = document.getElementById('target').value || '@a';
+                const selector = document.getElementById('selector').value || '@s';
+                const prefixText = document.getElementById('prefixText').value;
+                const middleText = document.getElementById('middleText').value;
+                const mainText = document.getElementById('mainText').value;
+                const underlined = document.getElementById('underlined').checked;
+                const clickAction = document.getElementById('clickAction').value;
+                const clickValue = document.getElementById('clickValue').value;
+                const hoverTextStart = document.getElementById('hoverTextStart').value;
+                const hoverTextMiddle = document.getElementById('hoverTextMiddle').value;
+                const hoverTextEnd = document.getElementById('hoverTextEnd').value;
+                const hoverColorStart = document.getElementById('hoverColorStart').value;
+                const hoverColorMiddle = document.getElementById('hoverColorMiddle').value;
+
+                // 构建悬停事件内容
+                const hoverContents = {
+                    "text": hoverTextStart,
+                    "color": hoverColorStart
+                };
+
+                if (hoverTextMiddle || hoverTextEnd) {
+                    hoverContents.extra = [];
+                    
+                    if (hoverTextMiddle) {
+                        hoverContents.extra.push({
+                            "text": hoverTextMiddle,
+                            "color": hoverColorMiddle
+                        });
+                    }
+                    
+                    if (hoverTextEnd) {
+                        hoverContents.extra.push(hoverTextEnd);
+                    }
+                }
+
+                // 构建主要文本对象
+                const mainTextObj = {
+                    "text": mainText,
+                    "underlined": underlined,
+                    "clickEvent": {
+                        "action": clickAction,
+                        "value": clickValue
+                    },
+                    "hoverEvent": {
+                        "action": "show_text",
+                        "contents": hoverContents
+                    }
+                };
+
+                // 构建extra数组
+                const extraArray = [];
+                
+                if (prefixText) {
+                    extraArray.push(prefixText);
+                }
+                
+                extraArray.push({
+                    "selector": selector
+                });
+                
+                if (middleText) {
+                    extraArray.push(middleText);
+                }
+                
+                extraArray.push(mainTextObj);
+
+                // 构建完整的tellraw命令
+                const tellrawCommand = {
+                    "text": "",
+                    "extra": extraArray
+                };
+
+                // 转换为JSON字符串并格式化
+                const jsonString = JSON.stringify(tellrawCommand, null, 4);
+                currentCommand = `/tellraw ${target} ${jsonString}`;
+
+                // 显示结果
+                document.getElementById('result').textContent = currentCommand;
+                document.getElementById('copyBtn').disabled = false;
+            });
+
+            // 复制到剪贴板
+            document.getElementById('copyBtn').addEventListener('click', function() {
+                if (!currentCommand) return;
+                
+                // 去除换行和空格
+                const commandToCopy = currentCommand.replace(/\s+/g, ' ').trim();
+                
+                navigator.clipboard.writeText(commandToCopy).then(function() {
+                    const originalText = this.textContent;
+                    this.textContent = '已复制!';
+                    setTimeout(() => {
+                        this.textContent = originalText;
+                    }, 2000);
+                }.bind(this));
+            });
+        });
+    </script>
+</body>
+</html>
