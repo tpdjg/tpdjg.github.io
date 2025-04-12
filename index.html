@@ -1,157 +1,210 @@
 <!DOCTYPE html>
-<html style="background-color: #000;">
-
+<html lang="zh-CN" style="background-color: #000;">
 <head>
-    <title>TPDJG.IO</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TPDJG - 主菜单</title>
     <style>
-        #SC {
-            border: 2px solid rgb(67, 170, 170);
-            border-radius: 5px;
-            position: relative;
-            left: 50px;
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #fff;
+            background-color: #000;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
         
-        #SC_F {
-            width: 150px;
-            height: 50px;
-            font-size: 30px;
-            background-color: #222;
-            cursor: pointer;
-            position: relative;
-        }
-        
-        #SC_S {
-            width: 150px;
-            overflow: hidden;
-            height: 0;
-            background-color: #444;
-            transition: height 0.2s;
-            position: relative;
-        }
-        
-        .SC1  {
-            font-size: 30px;
-            position: relative;
-            left: 30px;
-            height: 50px;
+        .header {
+            font-size: 2.5rem;
             text-align: center;
-            border: 1px solid #ffffff;
+            margin: 20px 0;
+            color: #43aaaa;
+            text-shadow: 0 0 10px rgba(67, 170, 170, 0.5);
+            flex-shrink: 0;
+        }
+        
+        .menu-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(6, 1fr);
+            gap: 15px;
+            width: 90%;
+            max-width: 1000px;
+            margin: 0 auto 40px;
+            flex-grow: 1;
+            align-content: center;
+        }
+        
+        .menu-item {
             background-color: #234a53;
-            transition: scale 0.2s;
-            margin-top: 10px;
-
-        }   
-        .SC1:hover{
+            border: 1px solid #43aaaa;
+            border-radius: 8px;
+            padding: 15px;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 120px;
+            box-sizing: border-box;
+        }
+        
+        .menu-item.enabled {
             cursor: pointer;
+        }
+        
+        .menu-item.enabled:hover {
             background-color: #3f8a9b;
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(67, 170, 170, 0.5);
         }
         
-        div {
-            color: #ffffff;
+        .menu-item.disabled {
+            background-color: #333;
+            border-color: #666;
+            opacity: 0.6;
+            cursor: not-allowed;
         }
         
-        a {
-            color: #00f;
+        .item-title {
+            font-size: 1.2rem;
+            color: white;
+            margin-bottom: 5px;
         }
         
-        #SC2 {
-            position: relative;
-            left: 200px;
-            overflow: hidden;
-            transform: rotate(90deg);
-            transition: transform 0.2s;
+        .item-desc {
+            font-size: 0.9rem;
+            color: #cccccc;
         }
-        b{
-            transform: rotate(90deg);
+        
+        .footer {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            padding: 20px;
+            background-color: #111;
+            flex-shrink: 0;
         }
-        #foot{
-            margin-top: 100px;
-            text-align: center;
-            color:grey;
-            margin-right: 100px;
+        
+        .footer a {
+            color: #43aaaa;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.3s;
         }
-        .ft{    
-            margin-left: 100px;
-            color:gray; 
-            text-decoration:none;  
+        
+        .footer a:hover {
+            color: #5fdada;
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            .menu-container {
+                grid-template-columns: repeat(2, 1fr);
+                grid-template-rows: repeat(12, 1fr);
+                width: 95%;
+            }
+            
+            .menu-item {
+                height: 100px;
+            }
+            
+            .header {
+                font-size: 1.8rem;
+            }
+            
+            .footer {
+                flex-wrap: wrap;
+                gap: 15px;
+            }
         }
     </style>
 </head>
 
 <body>
-    <div style="font-size: 80px;text-align: center;">TPDJGの神奇小网站</div>
-    <div id="SC">
-        <div id="SC_F" onclick="onTileClick()">查分<b id="SC2">></b></div>
-        <div id="SC_S">
-            <hr color="#444444" />
-            <div onclick="runwindow(0)" id="SC_S_S1" class="SC1">总分(https://m13jwo3d.yichafen.com)
-            </div>
-            <div onclick="runwindow(1)" id="SC_S_S2" class="SC1">语文(https://h4sxbuxd.yichafen.com) 
-            </div>
-            <div onclick="runwindow(2)" id="SC_S_S3" class="SC1">英语(https://b2vfd1pd.yichafen.com) 
-            </div>
-            <div onclick="runwindow(3)" id="SC_S_S4" class="SC1">历史(https://f3kl6w2d.yichafen.com) 
-            </div>
-            <div onclick="runwindow(4)" id="SC_S_S5" class="SC1">物理(https://b3d628qd.yichafen.com)
-            </div>
-            <div onclick="runwindow(5)" id="SC_S_S6" class="SC1">数学(https://b65ol9ed.yichafen.com) 
-            </div>
-            <div onclick="runwindow(6)" id="SC_S_S7" class="SC1">道法(https://o0do7iqd.yichafen.com)
-            </div>
-        </div>
+    <div class="header">TPDJG功能菜单</div>
+    
+    <div class="menu-container" id="menuGrid">
+        <!-- 菜单项将通过JavaScript动态生成 -->
     </div>
-    <div id="foot">
-        <a class="ft" href="https://github.com/tpdjg/tpdjg.github.io">返回本站</a>
+    
+    <div class="footer">
+        <a href="https://tpdjg.github.io">返回主站</a>
+        <a href="mailto:tpdjg_cn@outlook.com">联系我们</a>
     </div>
+
     <script>
-        var SC_S = document.getElementById("SC_S");
-        var SC_F = document.getElementById("SC_F");
-        var SC = document.getElementById("SC");
-        var SC2 = document.getElementById("SC2");
-        var SC1 = document.getElementsByClassName("SC1");
-        var SC_S_HT = '350px';
-        var Urls = [
-            "https://m13jwo3d.yichafen.com",
-            "https://h4sxbuxd.yichafen.com",
-            "https://b2vfd1pd.yichafen.com",
-            "https://f3kl6w2d.yichafen.com",
-            "https://b3d628qd.yichafen.com",
-            "https://b65ol9ed.yichafen.com",
-            "https://o0do7iqd.yichafen.com",
-        ]
-        refresh_width();
-        window.addEventListener("resize", () => {
-            refresh_width();
-        })
-        var runwindow = function(a) {
-            window.open(Urls[a])
-        }
+        // 二级菜单数据结构
+        const menuItems = [
+            // 第一行
+            [
+                ["https://tpdjg.github.io/tellraw_commend_spawn", "Tellraw Spawner", "生成Minecraft的tellraw指令", true, "", ""],
+                ["https://tpdjg.github.io/score", "Score check", "这是Bro班级的查分界面(Password required)", true, "2023430814", "学号前7位数+班级号3位"],//还是F12大佬，这都被你找到了(彩蛋)，虽然说Github仓库里也能找到就是了。
+                ["https://example.com/3", "#3", "DES", false, "", ""],
+                ["https://example.com/4", "#4", "DES", false, "", ""],
+            ],
+            // 第二行
+            [
+                ["https://example.com/5", "#5", "DES", false, "", ""],
+                ["https://example.com/6", "#6", "DES", false, "", ""],
+                ["https://example.com/7", "#7", "DES", false, "", ""],
+                ["https://example.com/8", "#8", "DES", false, "", ""]
+            ]
+        ];
 
-        function refresh_width() {
-            SC_S.style.width = String(document.body.offsetWidth - 100) + "px";
-            SC_F.style.width = String(document.body.offsetWidth - 100) + "px";
-            SC.style.width = String(document.body.offsetWidth - 100) + "px";
-            SC2.style.left = String(document.body.offsetWidth - 200) + "px";
-            for (var i = 0; i < 5; i++) {
-                SC1[i].style.width = String(document.body.offsetWidth - 160) + "px";
-                if(document.body.offsetWidth<750){
-                    SC1[i].style.height = "100px"
-                    SC_S_HT = '820px';
-                    SC_S.style.height = SC_S.offsetHeight === 0 ? '0' : SC_S_HT;
-                }else{
-                    SC1[i].style.height = "50px"
-                    SC_S_HT = '480px';
-                    SC_S.style.height = SC_S.offsetHeight === 0 ? '0' : SC_S_HT;
-                }
-
+        // 生成菜单项
+        function generateMenuItems() {
+    const menuGrid = document.getElementById('menuGrid');
+    menuGrid.innerHTML = '';
+    
+    menuItems.forEach((row, rowIndex) => {
+        row.forEach((item, colIndex) => {
+            const [url, title, desc, enabled, password, question] = item;
+            const menuItem = document.createElement('div');
+            menuItem.className = `menu-item ${enabled ? 'enabled' : 'disabled'}`;
+            
+            if (enabled) {
+                menuItem.onclick = () => handleMenuItemClick(url, password, question);
             }
+            
+            menuItem.innerHTML = `
+                <div>
+                    <div class="item-title">${title}</div>
+                    <div class="item-desc">${desc}</div>
+                </div>
+            `;
+            
+            menuGrid.appendChild(menuItem);
+        });
+    });
+}
 
-        }
+// 处理菜单项点击
+function handleMenuItemClick(url, password, question) {
+    if (!password) {
+        // 没有密码直接跳转
+        window.open(url, '_blank');
+        return;
+    }
+    
+    // 有密码则弹出输入框
+    const input = prompt(question);
+    if (input === null) {
+        return; // 用户取消输入
+    }
+    
+    if (input === password) {
+        // 密码正确
+        window.open(url, '_blank');
+    } else {
+        // 密码错误
+        alert('密码错误 ❌');
+    }
+}
 
-
-        function onTileClick() {
-            SC_S.style.height = SC_S.offsetHeight === 0 ? SC_S_HT : '0';
-        }
+// 初始化菜单
+document.addEventListener('DOMContentLoaded', generateMenuItems);
     </script>
 </body>
 </html>
