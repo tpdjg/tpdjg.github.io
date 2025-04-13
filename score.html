@@ -6,12 +6,13 @@
     <title>TPDJG.IO - 成绩查询系统</title>
     <style>
         body {
-            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            font-family: monospace;
             margin: 0;
             padding: 20px;
             color: #fff;
             background-color: #000;
             min-height: 100vh;
+
         }
         
         .header {
@@ -154,20 +155,23 @@
             "https://b65ol9ed.yichafen.com",
             "https://o0do7iqd.yichafen.com"
         ];
-        
+        function insertCharacter(str, char, index) {//网上找的用于插入字符串的方法
+            return str.substr(0, index) + char + str.substr(index);
+        }
         const scoreContent = document.getElementById("scoreContent");
         const arrow = document.querySelector(".arrow");
         let isMenuOpen = false;
         
-        // 初始化内容高度
+        // 动态内容高度
         function initContentHeight() {
-            if (window.innerWidth < 768) {
-                // 移动设备高度 - 7个项目 x 约85px每个
-                scoreContent.dataset.height = '600px';
-            } else {
-                // 桌面设备高度 - 7个项目 x 约65px每个
-                scoreContent.dataset.height = '500px';
+            scoreContent.dataset.height = '500px';//默认
+            if (window.innerWidth < 769) {//标准
+                scoreContent.dataset.height = '530px';
             }
+            if(window.innerWidth < 440){//二倍行距
+                scoreContent.dataset.height = '670px';
+            }
+            
         }
         
         // 切换菜单状态
