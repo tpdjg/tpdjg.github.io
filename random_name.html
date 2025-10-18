@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>随机点名抽问</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial Rounded MT Bold', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #ffdde1, #ee9ca7);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+        }
+        
+        .header {
+            text-align: center;
+            margin: 20px 0 30px;
+            position: relative;
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            color: #ff6b88;
+            text-shadow: 3px 3px 0 #fff, 5px 5px 0 rgba(0,0,0,0.1);
+            letter-spacing: 2px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        h1::after {
+            content: "";
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            filter: blur(4px);
+        }
+        
+        .decoration {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.7;
+            animation: float 3s infinite ease-in-out;
+        }
+        
+        .decoration:nth-child(1) {
+            top: -30px;
+            left: -50px;
+            animation-delay: 0s;
+        }
+        
+        .decoration:nth-child(2) {
+            top: -20px;
+            right: -50px;
+            animation-delay: 0.5s;
+        }
+        
+        .decoration:nth-child(3) {
+            bottom: -40px;
+            left: 20px;
+            animation-delay: 1s;
+        }
+        
+        .decoration:nth-child(4) {
+            bottom: -50px;
+            right: 30px;
+            animation-delay: 1.5s;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 25px;
+            padding: 30px;
+            width: 90%;
+            max-width: 800px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+            border: 5px solid rgba(255, 182, 193, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: "";
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border-radius: 30px;
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4, #fbc2eb, #a6c1ee);
+            z-index: -1;
+            filter: blur(20px);
+            opacity: 0.5;
+        }
+        
+        .name-display-container {
+            background: linear-gradient(to bottom, #fdf2f4, #fff);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 25px 0;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 4px dashed #ffb6c1;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .name-display {
+            font-size: 4.5rem;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+            transition: all 0.3s;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .name-display.selected {
+            color: #1e90ff;
+            text-shadow: 0 0 15px rgba(30, 144, 255, 0.7);
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 20px;
+            align-items: center; /* 居中对齐内部控件 */
+        }
+        
+        .start-btn {
+            padding: 18px;
+            font-size: 1.5rem;
+            background: linear-gradient(to right, #6b88ff, #1e90ff);
+            box-shadow: 0 6px 20px rgba(30, 144, 255, 0.4);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .start-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(30, 144, 255, 0.6);
+        }
+        
+        .start-btn:active {
+            transform: translateY(1px);
+        }
+
+        /* count control */
+        .count-control {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+            height: 56px; /* 和开始按钮高度更接近 */
+        }
+
+        .count-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            border: none;
+            background: linear-gradient(to right, #ffd1dc, #ff9aa2);
+            font-size: 1.4rem;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+        }
+
+        .count-display {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+            border: 2px solid #ffd1dc;
+        }
+
+        /* slot 容器样式：圆角 cyan 单线边框 */
+        .slot {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 140px;
+            padding: 6px 10px;
+            border-radius: 12px;
+            border: 1px solid cyan;
+            background: transparent;
+            position: relative;
+        }
+
+        /* 学号徽章 */
+        .slot .badge {
+            position: absolute;
+            top: -12px;
+            left: -12px;
+            min-width: 28px;
+            height: 22px;
+            padding: 2px 6px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            background: black; /* 黑色背景 */
+            color: pink; /* 粉色字体 */
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .slot .name {
+            display: inline-block;
+            padding: 2px 6px;
+            color: #03396c;
+        }
+        
+        .name-list-section {
+            margin-top: 30px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 20px;
+            padding: 25px;
+            border: 3px solid rgba(255, 182, 193, 0.5);
+        }
+        
+        .name-list-section h3 {
+            color: #ff6b88;
+            margin-bottom: 15px;
+            text-align: center;
+            font-size: 1.5rem;
+        }
+        
+        /* 名单表格：4 列布局，每个单元格用竖线分隔 */
+        .name-list-table {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px 12px;
+            width: 100%;
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 8px 12px;
+            border-radius: 10px;
+            border: 2px solid #ffb6c1;
+            background: white;
+            color: #333;
+            font-size: 1rem;
+        }
+
+        .name-cell {
+            padding: 6px 8px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 8px;
+        }
+
+        .name-cell::after {
+            content: "|";
+            margin-left: 8px;
+            color: #aaa;
+        }
+
+        /* 最后一列不显示竖线 */
+        .name-cell:nth-child(4n)::after { content: ""; }
+
+        .name-number {
+            font-weight: bold;
+            width: 46px;
+            text-align: right;
+        }
+
+        .name-text {
+            white-space: nowrap;
+        }
+
+        /* 响应式：窄屏时名单改为 2 列显示 */
+        @media (max-width: 600px) {
+            .name-list-table {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 6px 8px;
+                padding: 6px 8px;
+            }
+            .name-number { width: 40px; font-size: 0.95rem; }
+            .name-text { font-size: 0.95rem; }
+        }
+        
+        .name-tag {
+            background: linear-gradient(to right, #ff9a9e, #fad0c4);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 1.1rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .instructions {
+            margin-top: 30px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 20px;
+            padding: 20px;
+            max-width: 800px;
+            border: 3px solid rgba(255, 182, 193, 0.5);
+        }
+        
+        .instructions h3 {
+            color: #ff6b88;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .instructions ul {
+            padding-left: 25px;
+        }
+        
+        .instructions li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .footer {
+            margin-top: 30px;
+            color: #ff6b88;
+            font-weight: bold;
+            text-align: center;
+            opacity: 0.8;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .name-display {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>随机点名</h1>
+        <div class="decoration">🌸</div>
+        <div class="decoration">🍄</div>
+        <div class="decoration">🌼</div>
+        <div class="decoration">🌷</div>
+    </div>
+    
+    <div class="container">
+        <div class="name-display-container">
+            <div class="name-display" id="nameDisplay">准备点名</div>
+        </div>
+        
+        <div class="controls">
+            <div class="count-control" id="countControl">
+                <button class="count-btn" id="countDec">&lt;</button>
+                <div class="count-display" id="countDisplay">1</div>
+                <button class="count-btn" id="countInc">&gt;</button>
+            </div>
+            <button class="start-btn" id="startStopBtn">开始点名</button>
+        </div>
+        
+        <div class="name-list-section">
+            <h3>学生名单</h3>
+            <!-- 使用表格样式显示学生名单，4 列一行 -->
+            <div class="name-list-table" id="nameTableContainer" aria-label="学生名单表格"></div>
+        </div>
+    </div>
+    
+    <div class="instructions">
+        <h3>使用说明</h3>
+        <ul>
+            <li>点击"开始点名"按钮开始随机滚动显示姓名</li>
+            <li>再次点击按钮停止滚动，选中的姓名会以蓝色突出显示</li>
+            <li>可通过左右按钮选择同时抽取的人数（1-8）</li>
+            <li>当前班级共有 <span id="studentCount">--</span> 名学生</li>
+        </ul>
+    </div>
+    
+    <div class="footer">
+        离线随机点名工具 - 双击即可运行
+    </div>
+
+    <script>
+        // base64 编码的学生名单（UTF-8 编码后 base64）
+        const names_encode = [
+            "6JSh5b+X5paH","5pu+5p+P56W6","6ZmI5qyj55G2","6ZmI6ZKH5rGf","6ZmI5Lqm6I+y","56iL5Y+v6aao","5q616Zuo6L6w","5Yav6LS16bmP","6YOt5L2z5oKm","6IOh5oGp6ZOt","6IOh5aSp552/","6buE5oOc5pmX","6buE5paw55Sv","6buE5a2Q5piC","5Yyh5qWa546l","6LWW5aWV5aaC","5p2O5b+75rSL","5YiY5YGl5bKQ","5YiY5oCd5aak","5YiY5a2Q5pm0","6ZmG55G2","572X5oiQ56uj","5a2f6Zyy55G2","5YaJ6IyC5b2k","5L2Y6Zeu5qWg","5a2Z6Z2Z5oCh","5rGk5q2G5aqb","55Sw5Y2a5a6H","546L5Y+v5b+D","546L5YuJ5LmL","546L6IqK5oOg","546L56W65oms","6a2P6ZmG5rGA","6LCi55Ge5qGQ","54aK5reW5ra1","6K645a2Q6K+6","6ZiO5oCh5piV","6Ziz54ag","5Y+25pWs5a6H","6KKB6Iul6Zuq","5bKz6ZyI55K/","6Km55a6P5L+h","5byg55qT5rO9","5byg5rKQ6Ziz","5byg5pm654Sc","6ZKf5Y2T5L2R","5ZGo5b2m56u5","5pyx57+U5a6H"
+        ];
+
+        // 解码 base64（处理 UTF-8）
+        function decodeBase64Unicode(str) {
+            try {
+                // 老方法，通常可用
+                return decodeURIComponent(escape(atob(str)));
+            } catch (e) {
+                // 更可靠的实现
+                return decodeURIComponent(Array.prototype.map.call(atob(str), function(c) {
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                }).join(''));
+            }
+        }
+
+        let names = [];
+        // 初始化变量
+        let isRunning = false;
+        let slotIntervals = [];
+        let slotSpeed = 100; // ms
+        let count = 1; // 选中人数，1~8
+        const MAX_COUNT = 8;
+
+        // DOM
+        const nameDisplay = document.getElementById('nameDisplay');
+        const startStopBtn = document.getElementById('startStopBtn');
+    const nameTableContainer = document.getElementById('nameTableContainer');
+        const studentCount = document.getElementById('studentCount');
+        const countDec = document.getElementById('countDec');
+        const countInc = document.getElementById('countInc');
+        const countDisplay = document.getElementById('countDisplay');
+
+        // 样式： 高亮的名单
+        const style = document.createElement('style');
+        style.textContent = '.name-tag.highlight{ background: linear-gradient(to right, #cfe9ff, #b3dbff); border: 2px solid #1e90ff; color:#03396c; font-weight:bold; } .slot.final{ color: #1e90ff; text-shadow:0 0 12px rgba(30,144,255,0.6); }';
+        document.head.appendChild(style);
+
+        function init() {
+            // 解码名单
+            names = names_encode.map(decodeBase64Unicode);
+
+            // 显示学生数量
+            studentCount.textContent = names.length;
+
+            // 生成表格名单
+            generateNameTags();
+
+            // 渲染显示槽
+            renderSlots();
+
+            // 事件监听
+            startStopBtn.addEventListener('click', toggleRolling);
+            countDec.addEventListener('click', () => changeCount(count - 1));
+            countInc.addEventListener('click', () => changeCount(count + 1));
+
+            // 显示初始占位
+            // (renderSlots 已设置占位)
+        }
+
+        function padNumber(num, width) {
+            const s = num.toString();
+            return s.padStart(width, '0');
+        }
+
+        function formatNameDisplay(name) {
+            // 如果是两个汉字（长度2），在中间加入空格
+            // 注意：简单按字符数判断，适用于常见中文姓名
+            if (name.length === 2) {
+                return name[0] + ' ' + name[1];
+            }
+            return name;
+        }
+
+        function generateNameTags() {
+            nameTableContainer.innerHTML = '';
+            names.forEach((name, idx) => {
+                const cell = document.createElement('div');
+                cell.className = 'name-cell';
+
+                const num = document.createElement('div');
+                num.className = 'name-number';
+                num.textContent = padNumber(idx + 1, 3);
+
+                const txt = document.createElement('div');
+                txt.className = 'name-text';
+                txt.textContent = formatNameDisplay(name);
+
+                cell.appendChild(num);
+                cell.appendChild(txt);
+                nameTableContainer.appendChild(cell);
+            });
+        }
+
+        function renderSlots() {
+            // 创建 count 个 slot，每个包含 badge（学号）和 name 文本
+            nameDisplay.innerHTML = '';
+            for (let i = 0; i < count; i++) {
+                const slot = document.createElement('div');
+                slot.className = 'slot';
+                slot.style.margin = '0 6px';
+                slot.style.verticalAlign = 'middle';
+
+                const badge = document.createElement('div');
+                badge.className = 'badge';
+                badge.textContent = '-';
+                slot.appendChild(badge);
+
+                const nameEl = document.createElement('div');
+                nameEl.className = 'name';
+                nameEl.style.fontSize = '1.8rem';
+                nameEl.style.fontWeight = '700';
+                nameEl.textContent = '准备';
+                slot.appendChild(nameEl);
+
+                nameDisplay.appendChild(slot);
+            }
+        }
+
+        function changeCount(newCount) {
+            if (newCount < 1) newCount = 1;
+            if (newCount > MAX_COUNT) newCount = MAX_COUNT;
+            if (newCount === count) return;
+            count = newCount;
+            countDisplay.textContent = count;
+            // 如果正在运行，重置滚动以匹配新的槽数
+            if (isRunning) {
+                stopRolling(false);
+                renderSlots();
+                startRolling();
+            } else {
+                renderSlots();
+            }
+        }
+
+        function toggleRolling() {
+            if (isRunning) {
+                stopRolling(true);
+            } else {
+                startRolling();
+            }
+        }
+
+        function startRolling() {
+            isRunning = true;
+            startStopBtn.textContent = '停止点名';
+            // clear any previous
+            slotIntervals.forEach(id => clearInterval(id));
+            slotIntervals = [];
+
+            // For each slot, start an independent interval
+            for (let i = 0; i < count; i++) {
+                const id = setInterval(() => {
+                    const idx = Math.floor(Math.random() * names.length);
+                    const slot = nameDisplay.children[i];
+                    if (slot) {
+                        const nameEl = slot.querySelector('.name');
+                        const badge = slot.querySelector('.badge');
+                        if (nameEl) nameEl.textContent = names[idx];
+                        if (badge) badge.textContent = padNumber(idx + 1, 3);
+                        slot.dataset.index = idx;
+                        slot.classList.remove('final');
+                    }
+                }, slotSpeed);
+                slotIntervals.push(id);
+            }
+        }
+
+        // stopAndHighlight = true 时展示并高亮最终不重复结果
+        function stopRolling(stopAndHighlight = true) {
+            isRunning = false;
+            startStopBtn.textContent = '开始点名';
+            // stop intervals
+            slotIntervals.forEach(id => clearInterval(id));
+            slotIntervals = [];
+
+            if (!stopAndHighlight) return;
+
+            // 从 names 中随机抽取 count 个不重复索引
+            const indices = Array.from({length: names.length}, (_, i) => i);
+            // shuffle
+            for (let i = indices.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [indices[i], indices[j]] = [indices[j], indices[i]];
+            }
+            const finalIndices = indices.slice(0, Math.min(count, names.length));
+
+            // 更新每个槽并高亮对应名单标签
+            // 名单不显示结果，因此无需在表格中设置选中项
+
+            for (let i = 0; i < count; i++) {
+                const slot = nameDisplay.children[i];
+                const idx = finalIndices[i];
+                if (slot) {
+                    const nameEl = slot.querySelector('.name');
+                    const badge = slot.querySelector('.badge');
+                    if (nameEl) nameEl.textContent = names[idx];
+                    if (badge) badge.textContent = padNumber(idx + 1, 3);
+                    slot.dataset.index = idx;
+                    slot.classList.add('final');
+                }
+                // 名单表格不显示结果（不设置选中）
+            }
+        }
+
+        // 页面加载
+        window.onload = init;
+    </script>
+</body>
+</html>
